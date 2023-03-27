@@ -265,6 +265,10 @@ def tokenizer_sanity_check(tokenizer):
 
 
 if __name__ == "__main__":
+    import os
+    os.environ["CURL_CA_BUNDLE"] = ""
+
+
     training_conf = argument_parsing()
     import bitsandbytes  # This is noisy, so delay importing until after argument parsing so it doesn't make --help noisy
 
@@ -275,7 +279,6 @@ if __name__ == "__main__":
 
     model = get_model(training_conf, tokenizer)
     patch_model(model)
-
 
     train, evals = get_dataset(training_conf)
     train_collate_fn = DialogueDataCollator(
@@ -376,6 +379,10 @@ if __name__ == "__main__":
             resume=training_conf.resume_from_checkpoint,
             name=f"{training_conf.model_name}-{training_conf.log_dir}-finetuned",
         )
+
+    model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+    params = sum([p.numel() for p in model_parameters])
+    print("Number of trainable parameters after patching: {}M".format(int(params / 1e6)))
 
     trainer = SFTTrainer(
         model=model,

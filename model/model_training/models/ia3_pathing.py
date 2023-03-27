@@ -110,7 +110,9 @@ def _patched_self_attn_forward(self,
     return attn_output, attn_weights, past_key_value
 
 
-def patch_model(llama_model: LLaMAForCausalLM, config: LLaMAConfig, device=None):
+def patch_model(llama_model: LLaMAForCausalLM, device=None):
+    config = llama_model.config
+
     for param in llama_model.parameters():
         param.requires_grad = False
     
