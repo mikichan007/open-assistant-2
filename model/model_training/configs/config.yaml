@@ -120,8 +120,8 @@ llama-7b:
   fp16: true
   log_dir: "llama_log"
   learning_rate: 8e-6
-  #model_name: decapoda-research/llama-7b-hf
-  model_name: /home/ubuntu/llama_hf/llama-7b
+  model_name: decapoda-research/llama-7b-hf
+  # model_name: /home/ubuntu/llama_hf/llama-7b
   output_dir: llama_model
   weight_decay: 0.0
   max_length: 620
